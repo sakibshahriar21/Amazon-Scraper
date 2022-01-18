@@ -4,8 +4,9 @@ const request = require('request-promise'); // for making API requests
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const apiKey = 'f7f2cc2528fb6fc5b287c145a1c5b677';
-const baseUrl = `http://api.scraperapi.com?api_key=${apiKey}&autoparse=true`;
+
+
+const generateScraperUrl = (apiKey) => `http://api.scraperapi.com?api_key=${apiKey}&autoparse=true`; 
 
 app.use(express.json());
 
@@ -16,9 +17,10 @@ app.get('/', (req, res) => { //creating route
 //GET Product Details
 app.get('/products/:productId', async (req, res) => {
     const { productId } = req.params;
+    const { api_key } = req.query;
 
     try {
-        const response = await request(`${baseUrl}&url=https://www.amazon.com/dp/${productId}`);
+        const response = await request(`${generateScraperUrl(apiKey)}&url=https://www.amazon.com/dp/${productId}`);
         res.json(JSON.parse(response));
     } catch (error) {
         res.json(error);
@@ -28,9 +30,10 @@ app.get('/products/:productId', async (req, res) => {
 //GET Product Reviews
 app.get('/products/:productId/reviews', async (req, res) => {
     const { productId } = req.params;
+    const { api_key } = req.query;
 
     try {
-        const response = await request(`${baseUrl}&url=https://www.amazon.com/product-reviews/${productId}`);
+        const response = await request(`${generateScraperUrl(apiKey)}&url=https://www.amazon.com/product-reviews/${productId}`);
         res.json(JSON.parse(response));
     } catch (error) {
         res.json(error);
@@ -40,9 +43,10 @@ app.get('/products/:productId/reviews', async (req, res) => {
 //GET Product Offers
 app.get('/products/:productId/offers', async (req, res) => {
     const { productId } = req.params;
+    const { api_key } = req.query;
 
     try {
-        const response = await request(`${baseUrl}&url=https://www.amazon.com/gp/offer-listing/${productId}`);
+        const response = await request(`${generateScraperUrl(apiKey)}&url=https://www.amazon.com/gp/offer-listing/${productId}`);
         res.json(JSON.parse(response));
     } catch (error) {
         res.json(error);
@@ -52,9 +56,10 @@ app.get('/products/:productId/offers', async (req, res) => {
 //GET Search Result
 app.get('/search/:searchQuery', async (req, res) => {
     const { searchQuery } = req.params;
+    const { api_key } = req.query;
 
     try {
-        const response = await request(`${baseUrl}&url=https://www.amazon.com/s?k=${searchQuery}`);
+        const response = await request(`${generateScraperUrl(apiKey)}&url=https://www.amazon.com/s?k=${searchQuery}`);
         res.json(JSON.parse(response));
     } catch (error) {
         res.json(error);
